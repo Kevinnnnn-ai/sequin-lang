@@ -6,3 +6,6 @@ This is a list and link of all references that I used in the construction of thi
 - [How I Wrote A Lexer](https://yc.prosetech.com/how-i-wrote-a-lexer-39f4f79d2980)
 - [Crafting Interpreters: Scanning](https://craftinginterpreters.com/scanning.html)
 - [Tokens and Lexemes](https://www.geeksforgeeks.org/compiler-design/token-patterns-and-lexems/)
+- [fseek](https://www.geeksforgeeks.org/cpp/fseek-in-c-with-example/)
+- [ftell](https://www.geeksforgeeks.org/techtips/ftell-c-example/)
+- [fread](https://www.geeksforgeeks.org/c/fread-function-in-c/)
