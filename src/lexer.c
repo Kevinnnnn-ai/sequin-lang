@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 char* ToString(const char *source_code_path);
 
@@ -18,7 +19,7 @@ struct Token {
 };
 
 char* ToString(const char *source_code_path) {
-    FILE *source_code = fopen(source_code_path, "rb");
+    FILE *source_code = fopen(source_code_path, "r");
     if (source_code == NULL) {
         return NULL;
     }
@@ -50,6 +51,10 @@ char* ToString(const char *source_code_path) {
 
 int main() {
     const char *source_code_path = "C:\\Users\\Admin\\files\\projects\\sequin-lang\\examples\\example_1.sqn";
+
+    const char *script_string = ToString(source_code_path);
+    printf("%s", script_string);
+    free(script_string);
 
     return 0;
 }

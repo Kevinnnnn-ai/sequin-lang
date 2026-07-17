@@ -1,16 +1,25 @@
 # Changelog
-This is a documentation of all steps taken to building this project, including all the major and minor alterations that occur in this codebase.
 
-## 7/16/2026
-- Found SeqN, a programming language very similar to my idea.
-- Regardless, Sequin is a personal building exercise, so I will follow through with Sequin.
+This document records all notable development activity for Sequin, including major and minor changes to the codebase. Entries are grouped by date, with the most recent first.
+
+## 2026-07-16
+
+### Added
+
 - Created a general programming language pipeline workflow ([pipeline.txt](../res/pipeline.txt)).
-- Read about lexers ([How I Wrote A Lexer](https://yc.prosetech.com/how-i-wrote-a-lexer-39f4f79d2980)).
-- Read about lexers ([Crafting Interpreters: Scanning](https://craftinginterpreters.com/scanning.html)).
 - Created a general lexer workflow ([lexer.txt](../res/lexer.txt)).
-- Updated changelog structure formatting to bullets and links.
-- Began working on an initial lexer implementation ([lexer.c](../src/lexer.c)).
-- Read about token characteristics ([Tokens and Lexemes](https://www.geeksforgeeks.org/compiler-design/token-patterns-and-lexems/)).
-- Read about fseek ([fseek](https://www.geeksforgeeks.org/cpp/fseek-in-c-with-example/))
-- Read about ftell ([ftell](https://www.geeksforgeeks.org/techtips/ftell-c-example/))
-- Read about fread ([fread](https://www.geeksforgeeks.org/c/fread-function-in-c/))
+- Started the initial lexer implementation ([lexer.c](../src/lexer.c)).
+
+### Changed
+
+- Restructured changelog entries to use bulleted lists with inline links.
+
+### Research
+
+- Studied lexer design and implementation ([How I Wrote a Lexer](https://yc.prosetech.com/how-i-wrote-a-lexer-39f4f79d2980), [Crafting Interpreters: Scanning](https://craftinginterpreters.com/scanning.html)).
+- Studied token characteristics ([Tokens and Lexemes](https://www.geeksforgeeks.org/compiler-design/token-patterns-and-lexems/)).
+- Reviewed the C standard library file I/O functions [fseek](https://www.geeksforgeeks.org/cpp/fseek-in-c-with-example/), [ftell](https://www.geeksforgeeks.org/techtips/ftell-c-example/), and [fread](https://www.geeksforgeeks.org/c/fread-function-in-c/).
+
+### Notes
+
+- Discovered SeqN, an existing programming language very similar to this project's concept. Sequin remains a personal building exercise, so development continues as planned.
