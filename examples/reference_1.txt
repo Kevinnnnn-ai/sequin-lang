@@ -1,0 +1,48 @@
+{
+    "sequenceId": "JUPITER_MOON_SCAN_04",
+    "metadata": {
+        "author": "Mission Planning Team",
+        "description": "Science instrument warm-up and active Europa scan",
+        "target": "Europa"
+    },
+    "steps": [
+        {
+            "type": "command",
+            "timeType": "ABSOLUTE",
+            "timestamp": "2026-210T08:00:00.000",
+            "stem": "INS_POWER_STATE",
+            "arguments": ["WARM_UP"]
+        },
+        {
+            "type": "command",
+            "timeType": "RELATIVE",
+            "timeOffset": "00:05:00.000",
+            "stem": "GIMBAL_TARGET_SLEW",
+            "arguments": ["EUROPA_COORDINATES", 45.2, -12.8]
+        },
+        {
+            "type": "command",
+            "timeType": "RELATIVE",
+            "timeOffset": "00:02:00.000",
+            "stem": "INS_START_CAPTURE",
+            "arguments": {
+              "MODE": "RADAR_SCAN",
+              "DURATION_SEC": 120
+            }
+        },
+        {
+            "type": "command",
+            "timeType": "RELATIVE",
+            "timeOffset": "00:02:00.000",
+            "stem": "INS_POWER_STATE",
+            "arguments": ["SAFE_MODE"]
+        },
+        {
+            "type": "command",
+            "timeType": "RELATIVE",
+            "timeOffset": "00:00:00.000",
+            "stem": "TELEMETRY_SEND_BEACON",
+            "arguments": ["SEQ_04_COMPLETE"]
+        }
+    ]
+}

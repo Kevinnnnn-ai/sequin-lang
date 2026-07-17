@@ -1,0 +1,89 @@
+C =======================================================================
+C SEQUENCE ID: MSL_SOL_3452_AM_SCI_TLM
+C MISSION: MARS GROUND OPERATION ARCHITECTURE
+C SUBSYSTEMS: THERMAL, REAR_HAZCAM, MAST_CAM, X_BAND_TELECOM
+C DESCRIPTION: PRE-DAWN SCIENCE LOOPS AND MORNING DSN DOWNLINK PASS
+C AUTHOR: AMMOS SEQUENCING & SIMULATION TEAM
+C =======================================================================
+
+C -----------------------------------------------------------------------
+C PHASE 1: PRE-DAWN INITIALIZATION & THERMAL CONDITIONING
+C -----------------------------------------------------------------------
+@2026-218T04:15:00.000 SYS_SET_STATE (FLIGHT_MODE="STANDBY")
+    C_METADATA "Subsystem"   "C&DH"
+    C_METADATA "PowerDraw"   "12.5W"
+
+# Wait 30 seconds for flight bus telemetry to stabilize
+R00:00:30.000 THERM_HEATER_CONTROL (ZONE="MAST_CAM_OPTICS", STATUS="ON")
+    C_METADATA "Subsystem"   "Thermal"
+    C_METADATA "PowerDraw"   "45.0W"
+    C_METADATA "FlightRule"  "FR_TH_04: Optics must warm for >= 45 mins before lens actuation"
+
+# Verify heater status via embedded system check flag
+R00:00:05.000 FLIGHT_SYS_ASSERT (PARAM="MAST_CAM_TEMP_C", CONDITION="GREATER_THAN", VALUE=-40.0)
+
+C -----------------------------------------------------------------------
+C PHASE 2: PRE-DAWN ATMOSPHERIC SCIENCE (REAR HAZCAM)
+C -----------------------------------------------------------------------
+# Jump ahead 45 minutes to the targeted atmospheric opacity window
+R00:45:00.000 CAM_HAZ_SET_CONFIG (WINDOW="FULL_FRAME", INTEGRATION_MS=250, GAIN="LOW")
+    C_METADATA "Subsystem"   "Imaging"
+  
+R00:00:15.000 CAM_HAZ_CAPTURE (ID="HZ_REAR_04_A", COMPRESSION="LOSSLESS")
+    C_METADATA "DataVolume"  "4.2MB"
+    C_METADATA "SSR_Target"  "PARTITION_SCI_B"
+
+# Take a backup image immediately to clear buffer
+R00:00:12.000 CAM_HAZ_CAPTURE (ID="HZ_REAR_04_B", COMPRESSION="LOSSY_8X")
+
+R00:00:20.000 CAM_HAZ_SET_CONFIG (WINDOW="OFF")
+
+C -----------------------------------------------------------------------
+C PHASE 3: MORNING MASTCAM TARGETING AND SAMPLE IMAGING
+C -----------------------------------------------------------------------
+# Absolute time hard point synchronized with solar elevation angle
+@2026-218T05:30:00.000 GIMBAL_MAST_SLEW (AZIMUTH=142.35, ELEVATION=-12.80, SPEED="TRACKING")
+    C_METADATA "Subsystem"   "Kinematics"
+    C_METADATA "PowerDraw"   "65.0W"
+    C_METADATA "FlightRule"  "FR_GMB_01: Ensure no arm deployment activity during mast movement"
+
+# 4 minutes allocated for mechanical slew settling and target lock
+R00:04:00.000 CAM_MAST_AUTO_FOCUS (FILTER="RGB_750NM")
+R00:00:45.000 CAM_MAST_CAPTURE (ID="MC_SOL3452_01", COORD_SYS="LOCAL_SURFACE")
+    C_METADATA "DataVolume"  "18.5MB"
+
+# Step down the filter wheel array for multi-spectral analysis
+R00:00:30.000 CAM_MAST_SET_FILTER (FILTER="INFRARED_900NM")
+R00:00:15.000 CAM_MAST_CAPTURE (ID="MC_SOL3452_02", COORD_SYS="LOCAL_SURFACE")
+
+R00:00:30.000 THERM_HEATER_CONTROL (ZONE="MAST_CAM_OPTICS", STATUS="OFF")
+
+C -----------------------------------------------------------------------
+C PHASE 4: HIGH-GAIN DSN TELEMETRY DOWNLINK PASS
+C -----------------------------------------------------------------------
+# Switch power infrastructure over to the High-Gain X-Band Transmitter
+@2026-218T06:15:00.000 COMM_TX_POWER (BAND="X_BAND", ANTENNA="HGA", POWER_STATE="ON")
+    C_METADATA "Subsystem"   "Telecom"
+    C_METADATA "PowerDraw"   "110.0W"
+    C_METADATA "FlightRule"  "FR_TEL_12: Max continuous HGA TX runtime must not exceed 60 minutes"
+
+# Slew High-Gain Antenna tracking matrix toward Earth DSN Station 43 (Canberra)
+R00:01:15.000 GIMBAL_HGA_POINT (TARGET="EARTH_DSN_43", FREQ_LOCK="AUTO")
+
+# Wait for carrier signal lock before dumping flash partitions
+R00:02:00.000 COMM_TX_DUMP_DATA (SOURCE="PARTITION_SCI_B", PRIORITY="HIGH", RATE_KBPS=256)
+    C_METADATA "EstimatedDuration" "00:22:00.000"
+
+# Maintain carrier downlink lock window for exactly 25 minutes
+R00:25:00.000 COMM_TX_POWER (BAND="X_BAND", ANTENNA="HGA", POWER_STATE="OFF")
+
+C -----------------------------------------------------------------------
+C PHASE 5: RE-ENTERING DEEP SLEEP (LOW-POWER ARCHITECTURE)
+C -----------------------------------------------------------------------
+R00:01:00.000 FLIGHT_SYS_PURGE_BUFFERS (STATUS="CHECK_SUCCESS")
+R00:00:45.000 SYS_SET_STATE (FLIGHT_MODE="DEEP_SLEEP")
+    C_METADATA "PowerDraw"   "4.1W"
+
+C =======================================================================
+C END OF SEQUENCE MSL_SOL_3452_AM_SCI_TLM
+C =======================================================================

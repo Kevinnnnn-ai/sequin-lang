@@ -1,1 +1,32 @@
-mission = "Mission Naming";
+# This is a comment.
+
+# This is a sequence's ID. Every sequence needs one.
+I "sequin_test_01"   # This is an inline comment.
+
+# This is a sequence's metadata. This is optional.
+M "author"        "The Test Team"
+M "description"   "For testing Sequin functionality"
+M "target"        "Compiler"
+M "version"       "1.0.0"
+
+E 2026-218T04:15:00.000   INSTRUMENT_POWER_STATE( "WARM_UP" )    # This is a sequence's epoch. Every sequence needs one.
+R 01:15:00.000            INSTRUMENT_POWER_STATE( "POWER_ON" )   # This is a step declaration relative to the epoch.
+A 2026-219T04:15:00.000   INSTRUMENT_POWER_STATE( "READY" )      # This is an absolute step declaration.
+
+# Inside steps, you can declare other objects.
+R 30:00:00.000   INSTRUMENT_START_CAPTURE({"MODE": "RADAR_SCAN", "DURATION_SEC": 120})
+
+# By default, step types are commands, but there are special flags that can be fed to perform certain actions.
+R 01:15:00.000   &GROUND_BLOCK   CALIBRATE_ALL_SPECTROMETERS( "CALIBRATE" )   # Commands for ground stations.
+R 01:15:00.000   &GROUND_EVENT   SIMULATE_FULL_STATE( "SIMULATE" )            # Timeline action in ground software.
+
+# Flags I want to add in the future:
+# &A, &L, & GE,...: Shorthand step types.
+# &ACTIVATE   (&A): Spawns a parallel subsequence.
+# &LOAD       (&L): Loads another sequence file into the current sequence.
+# &START      (&S): Starts the loaded sequence file.
+# &NOTE       (&N): I don't know yet.
+# &REQUEST    (&R): I don't know yet.
+# A loaded sequence file should be checked for timing conflicts (usually dealing with epoch).
+# I think it should also have the option to use an epoch that is a relative time.
+# This would allow the loaded file to run as a sequence relative to the sequence it's loaded into.
