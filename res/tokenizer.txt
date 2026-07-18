@@ -1,0 +1,25 @@
+FUNCTION Tokenizer ( source_code_string, source_code_length )
+    token_list = []
+    position = 0
+    column = 0
+    line = 0
+
+    WHILE ( position <= source_code_length )
+        token
+        lexeme_start_position = position
+        character = source_code_string [ position ++ ]
+        
+        IF ( character == space or character == tab )
+            AddToken (  )
+        
+        SWITCH ( character )
+            CASE '"'
+                lexeme_start_position ++
+                DO
+                    position ++
+                WHILE ( Peek(source_code_string, position ) != '"' && position <= source_code_length )
+
+                IF ( !( position <= source_code_length ))
+                    ERROR
+                
+                AddToken (  )
