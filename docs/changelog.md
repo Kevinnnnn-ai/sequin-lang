@@ -3,6 +3,21 @@ This document records all notable development activity for Sequin, including maj
 
 <br>
 
+## 7-17-2026
+### Added
+- Added 2 references from SeqN to model Sequin syntax and output after.
+
+### Changed
+- Finished adding Sequin components for lexing.
+- Refactored ToString into RunLexer, finalized tenative token types, and began working on the token list generator ([lexer.c](../src/lexer.c)).
+- Restyled pipeline and lexer flowcharts ([lexer.txt](../res/lexer.txt), [pipeline.txt](../res/pipeline.txt)).
+- Compiled a tokenizer pseudocode excerpt ([tokenizer.txt](../res/tokenizer.txt)).
+
+### Research
+- Researched about helpful lexer functions and checks.
+
+<br>
+
 ## 7-16-2026
 ### Added
 - Created a general programming language pipeline workflow ([pipeline.txt](../res/pipeline.txt)).
@@ -20,13 +35,3 @@ This document records all notable development activity for Sequin, including maj
 
 ### Notes
 - Discovered SeqN, an existing programming language very similar to this project's concept. Sequin remains a personal building exercise, so development continues as planned.
-
-<br>
-
-## 7-17-2026
-### Added
-- Added 2 references from SeqN to model Sequin syntax and output after.
-
-### Changed
-- Finished adding Sequin components for lexing.
-- Refactored ToString into RunLexer, finalized tenative token types, and began working on the token list generator ([lexer.c](../src/lexer.c)).
