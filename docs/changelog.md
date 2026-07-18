@@ -6,9 +6,17 @@ This document records all notable development activity for Sequin, including maj
 ## 7-18-2026
 ### Added
 - Implemented tokenizer pseudocode into lexer process ([tokenizer.txt](../res/tokenizer.txt), [lexer.c](../src/lexer.c)).
+- Defined the `Token` structure (type, lexeme view, length, line, column) and the `TokenList` growable-array structure ([lexer.c](../src/lexer.c)).
+- Implemented `AddToken`: appends a token to the list, growing the heap array by one slot per call via `realloc` with the temp-pointer safety pattern and a failure check ([lexer.c](../src/lexer.c)).
 
 ### Changed
 - Put flowcharts into their own folder ([flowcharts/](../res/flowcharts/)).
+- Converted the token structures to `typedef`s and updated `Tokenize`/`RunLexer` signatures to match ([lexer.c](../src/lexer.c)).
+- Settled token storage design: lexemes are pointer+length views into the source buffer (no copies), positions are 1-based line and column, and the token list owns a contiguous heap array of `Token` values.
+
+### Notes
+- `AddToken` is intentionally correct-but-slow for now: it reallocates on every append. A TODO marks the planned upgrade to a `count == capacity` guard with capacity doubling, plus a real failure signal instead of a silent `void` return.
+- Known debts still open in `RunLexer`/`ToString`: source-buffer ownership once tokens hold views into it, and the `long int` vs `int` source-length mismatch.
 
 <br>
 
