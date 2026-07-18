@@ -7,6 +7,9 @@ This document records all notable development activity for Sequin, including maj
 ### Added
 - Implemented tokenizer pseudocode into lexer process ([tokenizer.txt](../res/tokenizer.txt), [lexer.c](../src/lexer.c)).
 
+### Changed
+- Put flowcharts into their own folder ([flowcharts/](../res/flowcharts/)).
+
 <br>
 
 ## 7-17-2026
