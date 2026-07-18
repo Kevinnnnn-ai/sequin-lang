@@ -3,6 +3,12 @@ This document records all notable development activity for Sequin, including maj
 
 <br>
 
+## 7-18-2026
+### Added
+- Implemented tokenizer pseudocode into lexer process ([tokenizer.txt](../res/tokenizer.txt), [lexer.c](../src/lexer.c)).
+
+<br>
+
 ## 7-17-2026
 ### Added
 - Added 2 references from SeqN to model Sequin syntax and output after.

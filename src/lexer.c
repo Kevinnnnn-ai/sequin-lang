@@ -40,71 +40,87 @@ struct TokenList {
     int capacity;
 };
 
-struct TokenList* GetTokenList(const char *src_string, int src_length);
-struct TokenList* RunLexer(const char *src_string, int src_length);
+char* ToString(const char *source_path, long int *string_length);
+struct TokenList* Tokenize(const char *source_string, int source_length);
+struct TokenList* RunLexer(const char *source_string, int source_length);
 
-void AppendToken(struct TokenList *token_list, struct Token token) {
+char* ToString(const char *source_path, long int *string_length) {
+    FILE *source_file = fopen(source_path, "r");
+    if (source_file == NULL) {
+        return NULL; // error
+    }
+
+    if (fseek(source_file, 0, SEEK_END) != 0) {
+        fclose(source_file);
+        return NULL; // error
+    }
+
+    long int source_length = ftell(source_file);
+    if (source_length == -1) {
+        fclose(source_file);
+        return NULL; // error
+    }
+
+    rewind(source_file);
+
+    char *source_string = malloc(source_length + 1);
+    if (source_string == NULL) {
+        fclose(source_file);
+        return NULL; // error
+    }
+
+    size_t bytes_read = fread(source_string, sizeof(char), source_length, source_file);
+    source_string[bytes_read] = '\0';
+    fclose(source_file);
+
+    if (string_length != NULL) {
+        *string_length = source_length;
+    }
     
+    return source_string;
 }
 
-struct TokenList* GetTokenList(const char *src_string, int src_length) {
+struct TokenList* Tokenize(const char *source_string, int source_length) {
     struct TokenList token_list;
     token_list.count = 0;
     token_list.capacity = 0;
 
-    int position = 0;
-    int line = 1;
-    int column = 1;
+    int current_position = 0;
+    int line = 0;
+    int column = 0;
 
-    while (position <= src_length) {
-        int lexeme_start = 0;
-        char character = src_string[position];
-
-        if (character == ' ' || character == '\t') {
-            column++;
-            position++;
-        }
+    while (current_position <= source_length) {
+        struct Token token;
+        int lexeme_start_position = current_position;
+        char character = source_string[current_position++];
 
         switch (character) {
-            
-        }
+            case '"':
+                lexeme_start_position++;
 
+                do {
+                    current_position++;
+                } while (source_string[current_position + 1] != '"' && current_position <= source_length);
+
+                if (!(current_position <= source_length)) {
+                    return NULL; // error
+                }
+        }
     }
 }
 
-struct TokenList* RunLexer(const char* src_path) {
-    FILE *src_file = fopen(src_path, "r");
-    if (src_file == NULL) {
-        return NULL;
+struct TokenList* RunLexer(const char* source_path) {
+    long int source_length;
+    const char *source_string = ToString(source_path, &source_length);
+    if (source_string == NULL) {
+        return NULL; // error
     }
 
-    if (fseek(src_file, 0, SEEK_END) != 0) {
-        fclose(src_file);
-        return NULL;
-    }
-
-    long src_length = ftell(src_file);
-    if (src_length == -1) {
-        fclose(src_file);
-        return NULL;
-    }
-
-    rewind(src_file);
-
-    char *src_string = malloc(src_length + 1);
-    if (src_string == NULL) {
-        fclose(src_file);
-        return NULL;
-    }
-
-    size_t bytes_read = fread(src_string, sizeof(char), src_length, src_file);
-    src_string[bytes_read] = '\0';
-    fclose(src_file);
-
+    free(source_string);
     return NULL;
 }
 
 int main() {
-    const char *src_path = "C:\\Users\\Admin\\files\\projects\\sequin-lang\\examples\\example_1.sqn";
-    RunLexer(src_path);
+    const char *source_path = "C:\\Users\\Admin\\files\\projects\\sequin-lang\\examples\\example_1.sqn";
+    RunLexer(source_path);
 }
